@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+
+    <!--数据源的配置在Service模块下配置。-->
+
+    <!--资源配置文件的统一注入-->
+    <!--读取配置文件-->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath:dubbo-server.properties</value>
+
+                <!--可以读取多个配置文件-->
+                <!--<value>classpath:dubbo-server.properties</value>
+                <value>classpath:jdbc.properties</value>-->
+                <!--读取外部配置文件 例子-->
+                <!--<value>file:${CONF_HOME}/jdbc.properties</value>-->
+            </list>
+        </property>
+    </bean>
+    <!-- 开启注解 -->
+    <mvc:annotation-driven />
+
+    <!-- 注解扫描包 -->
+    <context:component-scan base-package="com.ldt.test" use-default-filters="false">
+        <!--只加载@Controller的注解。-->
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller" />
+        <!--这个配置必须要存在，否则只加载@Controller的配置不起作用-->
+        <context:include-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+    </context:component-scan>
+
+    <!--在web.xml中已经扫描了，其余的配置文件。在这个地方就无需引入，否则会造成重复加载bean的异常-->
+    <!--<import resource="classpath:META-INF.spring/dubboContext.xml" />
+    <import resource="classpath:META-INF.spring/dubboContext-reference.xml" />-->
+
+
+
+    <!--
+        配置静态资源，直接映射到对应的文件夹，不被DispatcherServlet处理，3.04新增功能，需要重新设置spring-mvc-3.0.xsd
+    -->
+   <!-- <mvc:resources mapping="/img/**" location="/img/" />
+    <mvc:resources mapping="/js/**" location="/js/" />
+    <mvc:resources mapping="/css/**" location="/css/" />
+    <mvc:resources mapping="/html/**" location="/html/" />-->
+
+
+
+    <!-- 定义跳转的文件的前后缀 ，视图模式配置-->
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 这里的配置我的理解是自动给后面action的方法return的字符串加上前缀和后缀，变成一个 可用的url地址 -->
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+</beans>
