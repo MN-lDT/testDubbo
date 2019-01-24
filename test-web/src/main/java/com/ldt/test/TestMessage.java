@@ -25,7 +25,7 @@ public class TestMessage {
 
     public static org.apache.log4j.Logger logger = Logger.getLogger(TestMessage.class);
 
-    /*@Autowired
+    @Autowired
     private IMessageService messageService;
 
     @RequestMapping("/test")
@@ -33,7 +33,7 @@ public class TestMessage {
     public void getTestMessage(String messageStr) {
         messageService.getStr(messageStr);
 
-    }*/
+    }
 
     @RequestMapping("/testSendJson")
     @ResponseBody
