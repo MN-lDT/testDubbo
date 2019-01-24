@@ -7,7 +7,6 @@ import com.ldt.utils.HttpUtil;
 import com.ldt.utils.JsonUtils;
 import com.ldt.utils.ReadProperties;
 import org.apache.log4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,43 +29,43 @@ public class TestMessage {
 
     @RequestMapping("/test")
     @ResponseBody
-    public void getTestMessage(String messageStr) {
-        messageService.getStr(messageStr);
+    public String getTestMessage(String messageStr) {
+        return messageService.getStr(messageStr);
 
     }
 
     @RequestMapping("/testSendJson")
     @ResponseBody
-    public Map sendJsonTest(HttpServletRequest request, HttpServletResponse response){
-        String url = ReadProperties.ReadPropertiesFromFiles("api.properties","testSendJson.url","CONF_HOME");
+    public Map sendJsonTest(HttpServletRequest request, HttpServletResponse response) {
+        String url = ReadProperties.ReadPropertiesFromFiles("api.properties", "testSendJson.url", "CONF_HOME");
 
         Map resultMap = new HashMap();
         Map dateMap = new HashMap();
-        dateMap.put("applSeq",request.getParameter("applSeq"));
+        dateMap.put("applSeq", request.getParameter("applSeq"));
         JSONObject jsonData = new JSONObject();
-        jsonData.put("head","mdd");
-        jsonData.put("data",dateMap);
+        jsonData.put("head", "mdd");
+        jsonData.put("data", dateMap);
         //发送json
         String jsonStr = HttpUtil.sendJson(url, JsonUtils.obj2Json(jsonData));
         //String jsonStr = HttpUtil.httpURLConntJson(url,JsonUtils.obj2Json(jsonData));
-        logger.info("返回报文："+jsonStr);
+        logger.info("返回报文：" + jsonStr);
         JSONObject jsonObject = JSON.parseObject(jsonStr);
         Map reMap = (Map) jsonObject;
-        resultMap.put("applseq",reMap.get("applSeq"));
+        resultMap.put("applseq", reMap.get("applSeq"));
         return resultMap;
     }
 
     @RequestMapping(value = "/testAcceptJson", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject getTest(HttpServletRequest request, @RequestBody Map<String,Object> frontData){
-        logger.info("接收json: "+frontData);
+    public JSONObject getTest(HttpServletRequest request, @RequestBody Map<String, Object> frontData) {
+        logger.info("接收json: " + frontData);
         // 遍历Map
-        for (Map.Entry entry1: frontData.entrySet()) {
-            logger.info("key:"+entry1.getKey()+",value:"+entry1.getValue());
+        for (Map.Entry entry1 : frontData.entrySet()) {
+            logger.info("key:" + entry1.getKey() + ",value:" + entry1.getValue());
         }
         String applSeq = (String) frontData.get("applSeq");
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("applSeq",applSeq);
+        jsonObject.put("applSeq", applSeq);
 
         return jsonObject;
     }
