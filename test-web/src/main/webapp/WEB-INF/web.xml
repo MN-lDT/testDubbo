@@ -25,8 +25,9 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>
         classpath:META-INF/spring/spring-*.xml,
-        classpath:META-INF/spring/dubboContext.xml
-        classpath:META-INF/spring/dubboContext-reference.xml
+        classpath:META-INF/spring/dubboContext.xml,
+        classpath:META-INF/spring/dubboContext-reference.xml,
+        classpath:META-INF/spring/applicationContext-shiro.xml
     </param-value>
   </context-param>
 
@@ -77,4 +78,18 @@
       <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
+  <!-- 配置shiro的核心拦截器 -->
+  <filter>
+    <filter-name>shiroFilter</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    <!-- 因为filter比bean先加载，targetFilterLifecycle设置为true保证加载成功 -->
+    <init-param>
+      <param-name>targetFilterLifecycle</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>shiroFilter</filter-name>
+    <url-pattern>/</url-pattern>
+  </filter-mapping>
 </web-app>

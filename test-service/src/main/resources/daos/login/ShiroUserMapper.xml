@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ldt.login.dao.ShiroUserMapper">
+    <!--resultMap -->
+    <resultMap id="BaseResultMap" type="com.ldt.login.domain.ShiroUser" >
+        <!--一般主键用 id，非主键用result-->
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        USER_NAME, PASSWORD
+    </sql>
+
+    <select id="findInfo" resultMap="BaseResultMap" parameterType="string">
+        select <include refid="Base_Column_List" />
+        from SHIRO_USER
+        WHERE USER_NAME = #{username,jdbcType=VARCHAR}
+    </select>
+
+</mapper>
