@@ -3,4 +3,4 @@ target/
 ReadMe.txt
 *.iml
 vcs.xml
-
+.gitignore
